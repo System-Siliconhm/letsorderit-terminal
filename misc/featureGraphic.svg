@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280"
-  zoomAndPan="magnify" viewBox="0 0 960 540.000001" height="720" preserveAspectRatio="xMidYMid meet"
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024"
+  zoomAndPan="magnify" viewBox="0 0 1024 500" height="500" preserveAspectRatio="xMidYMid meet"
   version="1.0">
   <defs>
     <g />
@@ -31,7 +31,7 @@
       <rect x="0" width="885" y="0" height="445" />
     </clipPath>
   </defs>
-  <g transform="matrix(1, 0, 0, 1, 38, 47)">
+  <g transform="matrix(1, 0, 0, 1, 38, 27.5)">
     <g clip-path="url(#7387bc09a7)">
       <g clip-path="url(#7a3442c9e6)">
         <path fill="#0d0d0d"
