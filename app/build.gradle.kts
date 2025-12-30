@@ -13,7 +13,7 @@ android {
     namespace = "uk.nktnet.webviewkiosk"
 
     defaultConfig {
-        applicationId = "uk.nktnet.webviewkiosk"
+        applicationId = "com.letsorderit.terminal"
         minSdk = 21
         targetSdk = 36
         versionCode = 110
