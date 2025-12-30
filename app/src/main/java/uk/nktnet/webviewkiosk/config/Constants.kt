@@ -1,7 +1,7 @@
 package uk.nktnet.webviewkiosk.config
 
 object Constants {
-    const val WEBSITE_URL = "https://webviewkiosk.nktnet.uk"
+    const val WEBSITE_URL = "https://letsorderit.com"
     const val SOURCE_CODE_URL = "https://github.com/System-Siliconhm/letsorderit-terminal"
     const val DEFAULT_SEARCH_PROVIDER_URL = "https://duckduckgo.com?q="
 
