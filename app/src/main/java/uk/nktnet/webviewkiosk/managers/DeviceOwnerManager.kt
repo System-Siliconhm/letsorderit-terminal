@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.RemoteException
+import android.util.Log
 import com.rosan.dhizuku.api.Dhizuku
 import com.rosan.dhizuku.api.DhizukuBinderWrapper
 import com.rosan.dhizuku.api.DhizukuRequestPermissionListener
@@ -59,7 +60,7 @@ object DeviceOwnerManager {
             DAR = Dhizuku.getOwnerComponent()
             updateStatus(DeviceOwnerMode.Dhizuku)
         } catch (e: Throwable) {
-            e.printStackTrace()
+            Log.e(javaClass.simpleName, "Failed to use Dhizuku DPM", e)
         }
     }
 
@@ -76,7 +77,7 @@ object DeviceOwnerManager {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.w(javaClass.simpleName, "Failed to check owner permission", e)
             false
         }
     }
@@ -109,7 +110,7 @@ object DeviceOwnerManager {
                 }
             })
         } catch (e: Throwable) {
-            e.printStackTrace()
+            Log.e(javaClass.simpleName, "Failed to request Dhizuku permission", e)
             onDenied()
         }
     }
@@ -141,7 +142,11 @@ object DeviceOwnerManager {
             field[manager] = newInterface
             return manager
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(
+                javaClass.simpleName,
+                "Failed to create Dhizuku binder wrapper",
+                e
+            )
         }
         return null
     }

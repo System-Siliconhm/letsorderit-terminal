@@ -1,5 +1,6 @@
 package uk.nktnet.webviewkiosk.ui.components.setting.dialog
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 import uk.nktnet.webviewkiosk.R
+import uk.nktnet.webviewkiosk.config.Constants
 import uk.nktnet.webviewkiosk.config.UserSettings
+import uk.nktnet.webviewkiosk.managers.AuthenticationManager
 import uk.nktnet.webviewkiosk.managers.ToastManager
 import uk.nktnet.webviewkiosk.utils.updateDeviceSettings
 
@@ -52,7 +55,9 @@ fun ImportSettingsDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
 ) {
-    if (!showDialog) return
+    if (!showDialog) {
+        return
+    }
 
     val context = LocalContext.current
     val userSettings = remember { UserSettings(context) }
@@ -76,7 +81,7 @@ fun ImportSettingsDialog(
                     }
                     ToastManager.show(context, "Loaded file successfully.")
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(Constants.APP_SCHEME, "Loading imported file failed", e)
                     ToastManager.show(context, "Failed to read file: ${e.message}")
                 }
             }
@@ -182,9 +187,19 @@ fun ImportSettingsDialog(
                 ) {
                     TextButton(
                         onClick = {
-                            fileLauncher.launch(
-                                arrayOf("text/plain", "application/json")
-                            )
+                            try {
+                                fileLauncher.launch(
+                                    arrayOf("text/plain", "application/json")
+                                )
+                                AuthenticationManager.skipNextAuthResetForWindow()
+                            } catch (e: Exception) {
+                                Log.e(
+                                    Constants.APP_SCHEME,
+                                    "Failed to launch file picker for import",
+                                    e
+                                )
+                                ToastManager.show(context, "Error: ${e.message}")
+                            }
                         },
                         colors = ButtonDefaults.textButtonColors(
                             contentColor = MaterialTheme.colorScheme.tertiary

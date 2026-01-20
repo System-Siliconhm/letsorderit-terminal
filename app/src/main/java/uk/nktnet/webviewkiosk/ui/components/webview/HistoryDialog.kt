@@ -43,6 +43,7 @@ import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.delay
 import uk.nktnet.webviewkiosk.R
 import uk.nktnet.webviewkiosk.config.Constants
+import uk.nktnet.webviewkiosk.config.HistoryEntry
 import uk.nktnet.webviewkiosk.config.SystemSettings
 import uk.nktnet.webviewkiosk.config.mqtt.messages.MqttClearHistoryCommand
 import uk.nktnet.webviewkiosk.managers.MqttManager
@@ -73,7 +74,9 @@ private fun formatDatetime(context: Context, timestamp: Long): String {
 fun HistoryDialog(
     showHistoryDialog: Boolean,
     onDismiss: () -> Unit,
-    customLoadUrl: (newUrl: String) -> Unit
+    onItemClick: (item: HistoryEntry, index: Int) -> Unit,
+    disableCurrent: Boolean = true,
+    highlightCurrent: Boolean = true,
 ) {
     if (!showHistoryDialog) {
         return
@@ -145,14 +148,10 @@ fun HistoryDialog(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable(
-                                        enabled = !isUpdating && !isCurrent,
+                                        enabled = !disableCurrent || (!isUpdating && !isCurrent),
                                         onClick = {
                                             isUpdating = true
-                                            WebViewNavigation.navigateToIndex(
-                                                customLoadUrl,
-                                                systemSettings,
-                                                index
-                                            )
+                                            onItemClick(item, index)
                                             isUpdating = false
                                             onDismiss()
                                         }
@@ -174,12 +173,13 @@ fun HistoryDialog(
                                         },
                                         maxLines = 3,
                                         overflow = TextOverflow.Ellipsis,
-                                        style = if (isCurrent)
+                                        style = if (isCurrent && highlightCurrent) {
                                             MaterialTheme.typography.bodyMedium.copy(
                                                 color = MaterialTheme.colorScheme.primary,
                                             )
-                                        else
+                                        } else {
                                             MaterialTheme.typography.bodyMedium
+                                        }
                                     )
                                     Text(
                                         text = formatDatetime(context, item.visitedAt),
@@ -234,7 +234,9 @@ fun HistoryDialog(
                             isUpdating = false
                         }
                     ) { Text("Clear All") }
-                    TextButton(onClick = onDismiss) { Text("Close") }
+                    TextButton(onClick = onDismiss) {
+                        Text("Close")
+                    }
                 }
             }
         }

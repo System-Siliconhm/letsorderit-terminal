@@ -32,7 +32,7 @@ This repository was forked from the original Webview Kiosk Project:
 - https://github.com/nktnet1/webview-kiosk
 
 It can function as digital signage, a kid-friendly restricted browser, an
-immersive web reader, an interactive signup form, a home assistant dashboard,
+immersive web reader, an interactive sign-up form, a home assistant dashboard,
 or simply a wall clock.
 
 Designed for small businesses and device owners who are looking for a simple

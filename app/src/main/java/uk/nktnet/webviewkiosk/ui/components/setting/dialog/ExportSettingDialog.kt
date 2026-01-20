@@ -1,6 +1,7 @@
 package uk.nktnet.webviewkiosk.ui.components.setting.dialog
 
 import android.content.ClipData
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +40,9 @@ import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
+import uk.nktnet.webviewkiosk.config.Constants
 import uk.nktnet.webviewkiosk.config.UserSettings
+import uk.nktnet.webviewkiosk.managers.AuthenticationManager
 import uk.nktnet.webviewkiosk.managers.ToastManager
 
 enum class ExportTab {
@@ -52,7 +55,9 @@ fun ExportSettingsDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
 ) {
-    if (!showDialog) return
+    if (!showDialog) {
+        return
+    }
 
     val context = LocalContext.current
     val userSettings = remember { UserSettings(context) }
@@ -95,11 +100,10 @@ fun ExportSettingsDialog(
                 try {
                     context.contentResolver.openOutputStream(uri)?.use {
                         it.write(textDisplay.toByteArray())
-                        println("[DEBUG] $textDisplay")
                         ToastManager.show(context, "Exported to $uri")
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(Constants.APP_SCHEME, "Failed to export", e)
                     ToastManager.show(context, "Export Error: ${e.message}")
                 }
             }
@@ -180,7 +184,17 @@ fun ExportSettingsDialog(
                     TextButton(
                         onClick = {
                             scope.launch {
-                                exportLauncher.launch("wk_user_settings")
+                                try {
+                                    exportLauncher.launch("wk_user_settings")
+                                    AuthenticationManager.skipNextAuthResetForWindow()
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        Constants.APP_SCHEME,
+                                        "Failed to launch file picker for export",
+                                        e
+                                    )
+                                    ToastManager.show(context, "Error: ${e.message}")
+                                }
                             }
                         },
                         colors = ButtonDefaults.textButtonColors(
