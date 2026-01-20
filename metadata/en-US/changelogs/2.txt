@@ -1,0 +1,5 @@
+## Pre-release 0.0.1
+
+Second test release of LetsOrderIt Terminal.
+
+In sync with nktnet1/webviewkiosk v0.25.8.

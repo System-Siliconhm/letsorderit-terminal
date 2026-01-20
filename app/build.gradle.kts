@@ -16,8 +16,8 @@ android {
         applicationId = "com.letsorderit.terminal"
         minSdk = 21
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.0.1.pre-release"
+        versionCode = 2
+        versionName = "0.0.2.pre-release"
         buildConfigField("int", "MIN_SDK_VERSION", "$minSdk")
     }
 
